@@ -1,0 +1,101 @@
+#!/bin/bash
+
+
+# 1000/(c*N_a) = V[l];
+# 1000/(c*N_a) * 10^24 = V[nm^3]
+# (1000/(c*0.6022))^1/3 = boxlen[nm]
+# c = 1 --> boxlen= 11.84186
+bl=11.82209 
+wtype='W'
+jobname='SO4V9_Version2_WCA'
+
+if [ $wtype = 'W' ];
+then
+    water_r=0.128
+    press=10.0
+fi
+if [ $wtype = 'W2' ];
+then
+    water_r=0.133
+    press=1.0
+fi
+
+temp=303.15
+nmol=1000
+Dielectric=78.74
+ci='SDS_cg.pdb'
+pname='NA'
+topo='../topo/topol.top'
+
+cd initial_config 
+
+gmx insert-molecules -box $bl $bl $bl -ci $ci -nmol $nmol -o solute_only.gro -seed 0
+
+echo 'SDS    '${nmol} >> $topo
+
+gmx solvate -cp solute_only.gro -radius $water_r -o solvated.gro -cs cgwater.gro -p $topo 
+
+gmx grompp -f dummy.mdp -o dummy.tpr -c solvated.gro -p $topo
+
+gmx genion -np $nmol -pname $pname -seed 0 -s dummy.tpr -p $topo -o confout.gro << EOF
+SOL
+EOF
+
+gmx grompp -f dummy.mdp -o dummy_full.tpr -c confout.gro -p $topo
+
+cd ..
+
+gmx make_ndx -f initial_config/dummy_full.tpr -o index_run.ndx <<EOF
+t SO4V9
+t CM
+t CT
+t NA+
+t $wtype
+q
+EOF
+
+cd em
+cp em.mdp.example em.mdp
+
+sed -i s/DIELECTRIC/$Dielectric/g em.mdp
+sed -i s/WTYPE/$wtype/g em.mdp
+
+gmx grompp -f em.mdp -c ../initial_config/confout.gro -n ../index_run.ndx -p $topo 
+gmx mdrun -v -s topol.tpr
+
+cd ..
+
+
+gmx make_ndx -n index_run.ndx -o index_run.ndx -f em/topol.tpr << EOF
+t NA+ | t $wtype
+q
+EOF
+
+
+cd eq_npt
+cp npt_eq.mdp.example npt_eq.mdp
+
+sed -i s/DIELECTRIC/$Dielectric/g npt_eq.mdp
+sed -i s/WTYPE/$wtype/g npt_eq.mdp
+sed -i s/TEMP/$temp/g npt_eq.mdp
+sed -i s/PRESS/$press/g npt_eq.mdp
+
+gmx grompp -f npt_eq.mdp -c ../em/confout.gro -n ../index_run.ndx -p $topo
+gmx mdrun -v  -s topol.tpr 
+
+cd ..
+
+cd npt
+cp npt.mdp.example npt.mdp
+cp thomas_cont.sh ${jobname}.sh
+
+sed -i s/DIELECTRIC/$Dielectric/g npt.mdp
+sed -i s/WTYPE/$wtype/g npt.mdp
+sed -i s/TEMP/$temp/g npt.mdp
+sed -i s/PRESS/$press/g npt.mdp
+
+sed -i s/JOBNAME/$jobname/g ${jobname}.sh
+
+gmx grompp -f npt.mdp -c ../eq_npt/confout.gro -t ../eq_npt/traj.trr -n ../index_run.ndx -p $topo
+gmx mdrun -v -nsteps 10000 -s topol.tpr
+

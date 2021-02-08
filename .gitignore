@@ -1,0 +1,15 @@
+# Gromacs stuff
+*.gro
+*.tpr
+*.gro
+*.trr
+*.xtc
+*.mdp
+!dummy.mdp
+\#*
+*.top
+*.ndx
+*.edr
+*.log
+*.cpt
+*.sh

@@ -1,0 +1,8 @@
+1. Goto topo/topol.top and change the forcefield you want to have
+
+2. Copy automate.sh.example to automate.sh and check if the parameters 
+   on the top are as you want them.
+
+3. execute automate.sh
+
+4. Wait and upload to thomas to run npt
