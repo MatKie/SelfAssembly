@@ -18,7 +18,7 @@
 #$ -N JOBNAME 
 
 # Request 24 cores.
-#$ -pe mpi 48
+#$ -pe mpi 96
 
 # Set the working directory to somewhere in your scratch space.
 # Replace "<your_UCL_id>" with your UCL user ID
