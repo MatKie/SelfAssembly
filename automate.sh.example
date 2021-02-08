@@ -7,11 +7,11 @@
 # c = 1 --> boxlen= 11.84186
 bl=11.82209 
 wtype='W'
-jobname='SO4V9_Version2_WCA'
+jobname='S6S_iftV2_WCA'
 
 if [ $wtype = 'W' ];
 then
-    water_r=0.128
+    water_r=0.122
     press=10.0
     cs='cgwater.gro'
 fi
@@ -25,7 +25,7 @@ fi
 temp=303.15
 nmol=1000
 Dielectric=78.74
-ci='SDS_cg.pdb'
+ci='S6S_cg.pdb'
 pname='NA'
 topo='../topo/topol.top'
 
@@ -33,7 +33,7 @@ cd initial_config
 
 gmx insert-molecules -box $bl $bl $bl -ci $ci -nmol $nmol -o solute_only.gro -seed 0
 
-echo 'SDS    '${nmol} >> $topo
+echo 'S6S    '${nmol} >> $topo
 
 gmx solvate -cp solute_only.gro -radius $water_r -o solvated.gro -cs $cs -p $topo 
 

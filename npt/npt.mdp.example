@@ -28,7 +28,7 @@ energygrps = WTYPE CT CM Na+ SO4v9
 energygrp_table = WTYPE WTYPE CT CT CM CM Na+ Na+ SO4v9 SO4v9 WTYPE CT WTYPE CM WTYPE Na+ WTYPE SO4v9 CT CM CT Na+ CT SO4v9 CM Na+ CM SO4v9 Na+ SO4v9
 
 tcoupl   = nose-hoover;
-tc-grps  = SDS NA+_WTYPE;
+tc-grps  = S6S NA+_WTYPE;
 tau-t    = 10.0 10.0;
 ref-t    = TEMP TEMP ;
 
