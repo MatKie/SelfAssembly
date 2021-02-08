@@ -13,11 +13,13 @@ if [ $wtype = 'W' ];
 then
     water_r=0.128
     press=10.0
+    cs='cgwater.gro'
 fi
 if [ $wtype = 'W2' ];
 then
-    water_r=0.133
+    water_r=0.1535
     press=1.0
+    cs='cgw2.gro'
 fi
 
 temp=303.15
@@ -33,7 +35,7 @@ gmx insert-molecules -box $bl $bl $bl -ci $ci -nmol $nmol -o solute_only.gro -se
 
 echo 'SDS    '${nmol} >> $topo
 
-gmx solvate -cp solute_only.gro -radius $water_r -o solvated.gro -cs cgwater.gro -p $topo 
+gmx solvate -cp solute_only.gro -radius $water_r -o solvated.gro -cs $cs -p $topo 
 
 gmx grompp -f dummy.mdp -o dummy.tpr -c solvated.gro -p $topo
 
