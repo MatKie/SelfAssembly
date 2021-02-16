@@ -5,7 +5,7 @@
 # 1000/(c*N_a) * 10^24 = V[nm^3]
 # (1000/(c*0.6022))^1/3 = boxlen[nm]
 # c = 1 --> boxlen= 11.84186
-bl=11.82209 
+bl=18.554 
 wtype='W'
 jobname='SO4V9_Version2_WCA'
 
