@@ -3,6 +3,7 @@
 *.tpr
 *.gro
 *.trr
+*.npz
 *.xtc
 *.mdp
 !dummy.mdp
@@ -12,9 +13,16 @@
 *.edr
 *.log
 *.cpt
-*.sh
+*.out
 *.o[0-9]*
 *.e[0-9]*
 *.po[0-9]*
 *.pe[0-9]*
 *.xvg
+#Ohter Stuff
+.ipynb_checkpoints
+*.sh
+!analyse.sh
+*.pkl
+analysis/collect_data.py
+analysis/collect_energies.py

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+dt=10
+
+gmx trjconv -s ../npt/topol.tpr -conect -f ../npt/traj.trr -o traj_solute.xtc -dt $dt -n index_ana.ndx << EOF
+SDS_NA
+EOF
+gmx trjconv -s ../npt/topol.tpr -conect -f ../npt/traj.trr -o initial_config.gro -sep -dump 0 -n index_ana.ndx << EOF
+SDS_NA
+EOF
+
+mv initial_config0.gro initial_config.gro
