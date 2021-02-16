@@ -31,7 +31,7 @@ module load compilers/intel/2018/update3
 module load mpi/intel/2018/update3/intel
 module load gromacs/2019.3/intel-2018
 
-cp $GMXLIB/* .
+cp $GMXLIB/../../SDK.ff/tables/* .
 
 gerun mdrun_mpi -maxh 48 -s topol.tpr  -cpi state.cpt
 
