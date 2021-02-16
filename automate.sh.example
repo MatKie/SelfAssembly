@@ -11,13 +11,13 @@ jobname='SO4V9_Version2_WCA'
 
 if [ $wtype = 'W' ];
 then
-    water_r=0.128
+    water_r=0.108
     press=10.0
     cs='cgwater.gro'
 fi
 if [ $wtype = 'W2' ];
 then
-    water_r=0.1535
+    water_r=0.132
     press=1.0
     cs='cgw2.gro'
 fi
