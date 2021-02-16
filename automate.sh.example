@@ -5,27 +5,36 @@
 # 1000/(c*N_a) * 10^24 = V[nm^3]
 # (1000/(c*0.6022))^1/3 = boxlen[nm]
 # c = 1 --> boxlen= 11.84186
-bl=11.82209 
-wtype='W'
-jobname='SO4V9_Version2_WCA'
+wtype='SDKW'
+jobname='SDK_1M'
+M=3
+# M=1 -> 1molar, M=2 -> 0.363 molar, M=3 -> 0.13molar
+if [ $M -eq 1 ];
+then
+    water_r=0.1675
+    bl=11.82209 
+    nmol=1000
+fi
+if [ $M -eq 2 ];
+then
+    water_r=0.156
+    bl=16.6 # 0.363M
+    nmol=1000
+fi
+if [ $M -eq 3 ];
+then
+    water_r=0.1557
+    bl=18.554 # 0.13M
+    nmol=500
+fi
 
-if [ $wtype = 'W' ];
-then
-    water_r=0.128
-    press=10.0
-    cs='cgwater.gro'
-fi
-if [ $wtype = 'W2' ];
-then
-    water_r=0.1535
-    press=1.0
-    cs='cgw2.gro'
-fi
+
+press=1.0
+cs='sdkwater.gro'
 
 temp=303.15
-nmol=1000
-Dielectric=78.74
-ci='SDS_cg.pdb'
+Dielectric=80.00
+ci='SDS_SDK.pdb'
 pname='NA'
 topo='../topo/topol.top'
 
@@ -48,10 +57,10 @@ gmx grompp -f dummy.mdp -o dummy_full.tpr -c confout.gro -p $topo
 cd ..
 
 gmx make_ndx -f initial_config/dummy_full.tpr -o index_run.ndx <<EOF
-t SO4V9
-t CM
-t CT
-t NA+
+t SDKSO4
+t SDKCM
+t SDKCT
+t SDKSOD
 t $wtype
 q
 EOF
@@ -69,7 +78,7 @@ cd ..
 
 
 gmx make_ndx -n index_run.ndx -o index_run.ndx -f em/topol.tpr << EOF
-t NA+ | t $wtype
+t SDKSOD | t $wtype
 q
 EOF
 

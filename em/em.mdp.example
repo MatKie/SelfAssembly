@@ -11,16 +11,16 @@ nstlist         = 1         ; Frequency to update the neighbor list and long ran
 cutoff-scheme	= group     ; old neighbor searching because of non LJ interactions 
 ns_type         = grid      ; Method to determine neighbor list (simple, grid)
 pbc             = xyz       ; Periodic Boundary Conditions in all 3 dimensions
-rlist           = 2.0       ; cutoff for neighbor searching
+rlist           = 1.5       ; cutoff for neighbor searching
 
 ;Electrostatics
 coulombtype     = PME       ; Treatment of long range elctrostatic interactions
-rcoulomb        = 2.0         ; cutoff for coulomb interactions
+rcoulomb        = 1.5         ; cutoff for coulomb interactions
 epsilon-r       = DIELECTRIC
 ;VDWTYPE
 vdwtype         = user     ; Needs shifting via modifier
 vdw-modifier    = None     ; shift potential
-rvdw            = 2.0         ; vdw cutoff
+rvdw            = 1.5         ; vdw cutoff
 
-energygrps = WTYPE CT CM Na+ SO4v9
-energygrp_table = WTYPE WTYPE CT CT CM CM Na+ Na+ SO4v9 SO4v9 WTYPE CT WTYPE CM WTYPE Na+ WTYPE SO4v9 CT CM CT Na+ CT SO4v9 CM Na+ CM SO4v9 Na+ SO4v9
+energygrps = WTYPE SDKCT SDKCM SDKSOD SDKSO4
+energygrp_table = WTYPE WTYPE SDKCT SDKCT SDKCM SDKCM SDKSOD SDKSOD SDKSO4  SDKSO4 WTYPE SDKCT WTYPE SDKCM WTYPE SDKSOD WTYPE SDKSO4 SDKCT SDKCM SDKCT SDKSOD SDKCT SDKSO4 SDKCM SDKSOD SDKCM SDKSO4 SDKSOD SDKSO4
