@@ -1,7 +1,7 @@
 from mkutils import PlotGromacs, create_fig, save_to_file
 import os
 
-system = PlotGromacs(os.path.join('..', 'npt', 'energy.xvg'))
+system = PlotGromacs(os.path.join('..', 'npt', 'analysis', 'energy.xvg'))
 plotdir = 'energy_plots'
 if not os.path.isdir(plotdir):
     os.makedirs(plotdir)
@@ -51,7 +51,7 @@ flex_plot(['Coul. recip.', 'Coulomb (SR)'], name='Coul_LR_SR', blocksize=40)
 flex_plot('Total Energy', 'Potential', 'Total_Potential',blocksize=40) 
 flex_plot('Pressure', ['Pres-XX', 'Pres-YY', 'Pres-ZZ'], 'Pressure', blocksize=40, ax1_mean=True) 
 flex_plot('Volume', 'Density', 'Dens', blocksize=40) 
-flex_plot('Temperature', ['T-SDS', 'T-NA+_W2'],'Temp', blocksize=40, ax1_mean=True)
+flex_plot('Temperature', ['T-SDS', 'T-SDKSOD_SDKW'],'Temp', blocksize=40, ax1_mean=True)
 
 # flex_plot('Bond', 'Angle', blocksize=40)
 # flex_plot('LJ (SR)', 'Coulomb (SR)', blocksize=40)
@@ -62,8 +62,8 @@ flex_plot('Temperature', ['T-SDS', 'T-NA+_W2'],'Temp', blocksize=40, ax1_mean=Tr
 
 
 for i in range(0,5):
-    types = ['W2', 'CT', 'CM', 'NA+', 'SO4V9']
-    ctypes = ['NA+', 'SO4V9']
+    types = ['SDKW', 'SDKCT', 'SDKCM', 'SDKSOD', 'SDKSO4']
+    ctypes = ['SDKSOD', 'SDKSO4']
     lower, upper = 1, 550
     fig, ax = create_fig(3,2, sharex=True, fig_height=16, fig_width=10)
     for j, typ in enumerate(types):
