@@ -1,7 +1,7 @@
 from mkutils import PlotGromacs, create_fig, save_to_file
 import os
 
-system = PlotGromacs(os.path.join('..', 'npt', 'energy.xvg'))
+system = PlotGromacs(os.path.join('..', 'npt', 'analysis', 'energy.xvg'))
 plotdir = 'energy_plots'
 if not os.path.isdir(plotdir):
     os.makedirs(plotdir)
@@ -11,7 +11,7 @@ system.properties
 
 # Bond Angle
 def flex_plot(ax1_props, ax2_props=None, name=None, blocksize=20, ax1_mean=False, ax2_mean=False):
-    lower, upper = 1, 5e3
+    lower, upper = 1, 1e4
     
     fig, ax = create_fig(1,1)
     ax = ax[0]
@@ -25,7 +25,7 @@ def flex_plot(ax1_props, ax2_props=None, name=None, blocksize=20, ax1_mean=False
             if ax2_props is not None: alpha = 0.7
     for prop, c in zip(ax1_props, ax1_colors):
         if ax1_mean:
-            system.plot_mean(ax, prop, blocksize=blocksize, bounds=(lower, upper), color=c, alpha=alpha, err=True)
+            system.plot_mean(ax, prop, blocksize=blocksize, bounds=None, color=c, alpha=alpha, err=True)
         else:
             system.plot_timeseries(ax, prop, blocksize=blocksize, bounds=(lower, upper), color=c, alpha=alpha)
     if ax2_props is not None:
@@ -64,18 +64,20 @@ flex_plot('Temperature', ['T-SDS', 'T-NA+_W2'],'Temp', blocksize=40, ax1_mean=Tr
 for i in range(0,5):
     types = ['W2', 'CT', 'CM', 'NA+', 'SO4V9']
     ctypes = ['NA+', 'SO4V9']
-    lower, upper = 1, 550
+    lower, upper = 1, 1000
     fig, ax = create_fig(3,2, sharex=True, fig_height=16, fig_width=10)
     for j, typ in enumerate(types):
         if j <= i:
             typ_1, typ_2 = typ, types[i]
         else:
             typ_1, typ_2 = types[i], typ
-        system.plot_timeseries(ax[j], 'LJ-SR:{:s}-{:s}'.format(typ_1, typ_2), bounds=(lower, upper))
+        system.plot_timeseries(ax[j], 'LJ-SR:{:s}-{:s}'.format(typ_1, typ_2), bounds=None)
         if typ_1 in ctypes and typ_2 in ctypes:
             ax2 = ax[j].twinx()
-            system.plot_timeseries(ax2, 'Coul-SR:{:s}-{:s}'.format(typ_1, typ_2), bounds=(lower, upper), color='C3', alpha=0.7)
+            system.plot_timeseries(ax2, 'Coul-SR:{:s}-{:s}'.format(typ_1, typ_2), bounds=None, color='C3', alpha=0.7)
 
+        name = '{:s}-{:s}'.format(typ_1, typ_2)
+        save_to_file(os.path.join(plotdir, name))
 
 
 

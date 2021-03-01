@@ -5,6 +5,8 @@ import numpy as np
 import pickle 
 cluster_objects='C1 C2 C3 C4'
 eq = False
+splits = [1, 420, 700, 1000] # Start, stop1, stop2..
+
 
 if eq:
     traj = os.path.join('..','eq_npt', 'traj.trr')
@@ -15,14 +17,27 @@ else:
 ensemble = ClusterEnsemble(tpr, traj, cluster_objects)
 ensemble.cluster_analysis(cut_off=6.5)
 
+dt = ensemble.universe.trajectory.dt/1e3 # in ns
+
+# +
+splits[0] -= 1
+frames = []
+for i, j in zip(splits, splits[1:]):
+    frames.append((i+1, j, 1))
+    
+#names = list(map(lambda x: '{:d} - {:d} ns'.format(x[0], x[1]), frames))
+names = ['{:d} - {:d} ns'.format(x,y) for x,y,z in map(lambda x: [int(xi*dt) for xi in x], frames)]
 
 
 # +
 fig, ax = create_fig(1,1)
 ax = ax[0]
+
+
+    
 ax.set_title('Saft: SDS in W2 at 1 mol/l', fontsize=16)
-ensemble.plot_histogram(ax, maxbins=False, density=True, frames=[(1,30,1), (31, 420, 1), (421, 515, 1)],
-                        **{'label': ['1 - 30 ns', '31 - 420 ns', '421 - 515 ns']}
+ensemble.plot_histogram(ax, maxbins=False, density=True, frames=frames,
+                        **{'label': names}
                        )
 ax.legend()
 
