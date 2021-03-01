@@ -24,5 +24,7 @@
 *.sh
 !analyse.sh
 *.pkl
+*.pdf
+*.png
 analysis/collect_data.py
 analysis/collect_energies.py

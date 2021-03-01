@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+gmx trjconv -s topol.tpr -f traj.trr -o traj_cut.xtc -dt 1000 << EOF
+System
+EOF
+gmx trjconv -s topol.tpr -f traj_cut.xtc -o traj_min.xtc -dt 10000 << EOF 
+System
+EOF
+
+rm \#*.xtc*
