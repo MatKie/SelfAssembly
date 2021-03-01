@@ -26,3 +26,5 @@
 *.pkl
 analysis/collect_data.py
 analysis/collect_energies.py
+*.pdf
+*.png
