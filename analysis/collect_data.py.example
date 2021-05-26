@@ -35,7 +35,7 @@ for clusterlist in ensemble.cluster_list:
 
 with open('save.pkl', 'wb') as f:
     pickle.dump(ensemble.cluster_sizes, f)
-    pickle.dump(np.asarray(rgyr_list))
+    pickle.dump(np.asarray(rgyr_list), f)
 
 
 
