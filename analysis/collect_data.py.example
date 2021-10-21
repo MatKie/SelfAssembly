@@ -13,8 +13,8 @@ if eq:
     traj = os.path.join('..','npt', 'traj_cut.trr')
     tpr = os.path.join('..', 'npt', 'topol.tpr')
 else:
-    traj = os.path.join('..','npt', 'traj.trr')
-    tpr = os.path.join('..', 'npt', 'topol.tpr')
+    traj = os.path.join('..','npt', 'traj.xtc')
+    tpr = os.path.join('..', 'npt', 'tprout.tpr')
 ensemble = ClusterEnsemble(tpr, traj, cluster_objects)
 ensemble.cluster_analysis(cut_off=6.5)
 
