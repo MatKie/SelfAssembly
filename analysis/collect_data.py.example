@@ -6,13 +6,15 @@ import pickle
 cluster_objects='C1 C2 C3 C4'
 eq = False
 
+
+
 # +
 if eq:
     traj = os.path.join('..','npt', 'traj_cut.trr')
     tpr = os.path.join('..', 'npt', 'topol.tpr')
 else:
-    traj = os.path.join('..','npt', 'traj.trr')
-    tpr = os.path.join('..', 'npt', 'topol.tpr')
+    traj = os.path.join('..','npt', 'traj.xtc')
+    tpr = os.path.join('..', 'npt', 'tprout.tpr')
 ensemble = ClusterEnsemble(tpr, traj, cluster_objects)
 ensemble.cluster_analysis(cut_off=6.5)
 
@@ -29,7 +31,6 @@ for clusterlist in ensemble.cluster_list:
 
 
 # -
-
 
 
 with open('save.pkl', 'wb') as f:
