@@ -6,39 +6,36 @@ import pickle
 cluster_objects='C1 C2 C3 C4'
 eq = False
 
+# +
 if eq:
-    traj = os.path.join('..','eq_npt', 'traj.trr')
-    tpr = os.path.join('..', 'eq_npt', 'topol.tpr')
+    traj = os.path.join('..','npt', 'traj_cut.trr')
+    tpr = os.path.join('..', 'npt', 'topol.tpr')
 else:
     traj = os.path.join('..','npt', 'traj.trr')
     tpr = os.path.join('..', 'npt', 'topol.tpr')
 ensemble = ClusterEnsemble(tpr, traj, cluster_objects)
 ensemble.cluster_analysis(cut_off=7.5)
 
+rgyr_list = []
 
-fig, ax = create_fig(1,1)
-ax = ax[0]
-ensemble.plot_histogram(ax, maxbins=True, density=False)
-save_to_file('histogram')
+for clusterlist in ensemble.cluster_list:
+    time = ensemble.universe.trajectory.time
+    for cluster in clusterlist:
+        if cluster.n_residues > 1:
+            ensemble.unwrap_cluster(cluster)
+            rgyr = ensemble.gyration(cluster, mass=False, pca=True)
+            rgyr_list.append([time, cluster.n_residues, np.sqrt(np.sum(rgyr)) ,*rgyr, rgyr[2]*rgyr[2]-0.5*(rgyr[1]*rgyr[1]+rgyr[0]*rgyr[0])])
 
-# +
-'''
-f32, f21 = [], []
-for clusters in ensemble.cluster_list:
-    for cluster in clusters:
-        if len(cluster) > 5:
-            ensemble.unwrap_cluster(cluster, unwrap=True)
-            f32i, f21i = ensemble.calc_f_factors(cluster)
-            f32.append(f32i)
-            f21.append(f21i)
-fig, ax = create_fig(1,1)
-ax = ax[0]
 
-ax.plot(f32, f21, ls='', marker='o', alpha=0.2, color='k')
-ax.set_xlim(0,1)
-ax.set_ylim(0,1)
-'''
+
 # -
+
+
+
+with open('save.pkl', 'wb') as f:
+    pickle.dump(ensemble.cluster_sizes, f)
+    pickle.dump(np.asarray(rgyr_list), f)
+
 
 
 
