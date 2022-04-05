@@ -21,10 +21,10 @@ rgyr_list = []
 for clusterlist in ensemble.cluster_list:
     time = ensemble.universe.trajectory.time
     for cluster in clusterlist:
-        if cluster.n_residues > 4:
+        if cluster.n_residues > 1:
             ensemble.unwrap_cluster(cluster)
-            rgyr = ensemble.rgyr(cluster, components=True)
-            rgyr_list.append([time, cluster.n_residues, *rgyr, rgyr[1]*rgyr[1]-0.5*(rgyr[2]*rgyr[2]+rgyr[3]*rgyr[3])])
+            rgyr = ensemble.gyration(cluster, mass=False, pca=True)
+            rgyr_list.append([time, cluster.n_residues, np.sqrt(np.sum(rgyr)) ,*rgyr, rgyr[2]*rgyr[2]-0.5*(rgyr[1]*rgyr[1]+rgyr[0]*rgyr[0])])
 
 
 
